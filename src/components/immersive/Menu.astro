@@ -1,0 +1,9 @@
+---
+import Photo from '../shared/Photo.astro';
+import { immersiveMenu } from '../../data/immersive';
+---
+<section id="menu" class="i-menu i-shell" tabindex="-1" aria-labelledby="i-menu-title">
+  <div class="i-menu-heading"><div><p class="i-kicker">03 / COFFEE & KITCHEN</p><h2 id="i-menu-title">Made for<br /><em>the moment.</em></h2></div><div><p>A cup. A bite. A reason to linger.<br />A few ideas for the table.</p><nav aria-label="Illustrative menu categories">{immersiveMenu.map(item => <a href={`#${item.id}`}>{item.category} <span aria-hidden="true">↓</span></a>)}</nav></div></div>
+  <div class="i-menu-editorial">{immersiveMenu.map((item, i) => <article id={item.id} tabindex="-1" data-menu-item={item.id} data-availability={item.availability} class="i-menu-item" data-i-reveal><div class="i-menu-photo"><Photo photo={item.image} sizes="(max-width: 700px) 90vw, 45vw" /><span aria-hidden="true">0{i + 1}</span></div><div class="i-menu-item-copy"><p class="i-kicker">{item.category} / ILLUSTRATIVE</p><h3>{item.name}</h3><p>{item.description}</p>{item.price && <p>{new Intl.NumberFormat('en-IE', { style: 'currency', currency: item.price.currency }).format(item.price.amount)}</p>}</div></article>)}</div>
+  <p class="i-note i-menu-disclosure">Demonstration menu only — not Café Kalma’s official offerings. Products and availability are unconfirmed; no prices are supplied. No orders or payments are accepted.</p>
+</section>

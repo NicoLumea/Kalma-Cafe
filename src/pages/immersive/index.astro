@@ -1,4 +1,19 @@
 ---
-import ComingSoon from '../../components/presentation/ComingSoon.astro';
+import ImmersiveLayout from '../../layouts/ImmersiveLayout.astro';
+import Hero from '../../components/immersive/Hero.astro';
+import Story from '../../components/immersive/Story.astro';
+import Menu from '../../components/immersive/Menu.astro';
+import Gallery from '../../components/immersive/Gallery.astro';
+import Newsletter from '../../components/immersive/Newsletter.astro';
+import Photo from '../../components/shared/Photo.astro';
+import { business } from '../../data/business';
+import { immersivePhoto } from '../../data/immersive';
 ---
-<ComingSoon name="Kalma Immersive" number="04" />
+<ImmersiveLayout>
+  <Hero />
+  <section id="story" class="i-moment i-shell" tabindex="-1" aria-labelledby="i-moment-title"><p class="i-kicker">01 / THE KALMA MOMENT</p><h2 id="i-moment-title" data-i-reveal>More than coffee.<br /><em>A moment to stay.</em></h2><div class="i-moment-bottom"><span class="i-moment-mark" aria-hidden="true">K.</span><p>Kalma brings together Guatemalan coffee, simple food and unhurried moments. An invitation to pause, to connect, and to find a little pleasure in the everyday.</p><a class="i-link" href="#origin">Follow the story <span aria-hidden="true">↓</span></a></div></section>
+  <Story /><Menu /><Gallery />
+  <section id="visit" class="i-visit i-shell" tabindex="-1" aria-labelledby="i-visit-title"><p class="i-kicker">05 / FIND THE MOMENT</p><div class="i-visit-heading"><h2 id="i-visit-title">Guatemalan heart.<br /><em>Berlin address.</em></h2><span class="i-visit-star" aria-hidden="true">✳</span></div><div class="i-visit-bottom"><div><address>{business.address.street}<br />{business.address.city}, {business.address.country}</address><a class="i-button i-button-green" href={business.directions} target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span><span class="sr-only"> (opens Google Maps in a new tab)</span></a></div><div><p>{business.status}</p><a class="i-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Opening updates <span aria-hidden="true">↗</span><span class="sr-only"> (opens Instagram in a new tab)</span></a></div></div></section>
+  <div class="i-closing-image" aria-hidden="true"><Photo photo={immersivePhoto} sizes="100vw" /><span>Take your time.</span></div>
+  <Newsletter />
+</ImmersiveLayout>

@@ -56,3 +56,12 @@ The text wordmark, simple `k` favicon, typographic address panel and CSS composi
 Both have local 640×427 and 1280×854 WebP variants, responsive delivery and descriptive alt text. The four files total 264,024 bytes.
 
 - Instrument Serif, regular 400 Latin: https://github.com/google/fonts/tree/main/ofl/instrumentserif. SIL Open Font License 1.1, recorded in `public/assets/fonts/instrument-serif-OFL.txt`. The WOFF2 was obtained through the official Google Fonts CSS endpoint and is served locally. It loads only on Minimal and the selector. No italic font was added. Body text reuses local DM Sans. Heritage and Organic font loading is unchanged.
+
+## Phase 4: Immersive
+
+- Wix mood reference: https://www.wix.com/website-template/view/html/1800 — “Chocolate Shop Website Template”. Its public description references photographic depth and scrolling effects. Used only for general cinematic direction; no Wix source, images, animations or ordering features are included.
+- One additional standard Unsplash photograph: https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04. Downloaded 30 October 2026 under the Unsplash License described above. It shows an espresso cup on dark stone, not an official Kalma product.
+- Local `coffee/espresso` WebP variants: 640×427 (17,654 bytes), 1280×853 (50,164 bytes), 1920×1280 (106,606 bytes). The hero uses all three responsive sources; other placements use the existing shared Photo component and its smaller variants.
+- Existing licensed beans, brewing, café atmosphere, bread, breakfast and coffee-cup imagery is reused. Visible captions distinguish stock imagery from Kalma's actual premises, products and sourcing.
+- Reuses locally hosted Cormorant Garamond (including its existing italic) and DM Sans under their recorded SIL OFL licenses. No extra fonts, animation library or video was added.
+- Shared provisional palette, wordmark and factual business data remain unchanged. “A moment worth experiencing” is a creative theme for this concept; the official headline remains “A moment worth tasting.”

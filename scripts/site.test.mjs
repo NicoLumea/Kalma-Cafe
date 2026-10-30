@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -78,14 +79,14 @@ test('no operational forms, active email collection, third-party scripts or remo
   }
 });
 
-test('only completed Heritage, Organic and Minimal concepts are linked from the gallery', () => {
+test('all four completed concepts are linked from the gallery', () => {
   const home = readFileSync(join(root, 'index.html'), 'utf8');
-  for (const route of ['immersive']) assert.doesNotMatch(home, new RegExp(`href="/${route}`));
+  assert.match(home, /href="\/immersive\/"/);
   assert.match(home, /href="\/heritage\/"/);
   assert.match(home, /href="\/organic\/"/);
   assert.match(home, /href="\/minimal\/"/);
-  assert.equal((home.match(/COMING SOON/g) ?? []).length, 1);
-  assert.equal((home.match(/AVAILABLE TO EXPLORE/g) ?? []).length, 3);
+  assert.equal((home.match(/COMING SOON/g) ?? []).length, 0);
+  assert.equal((home.match(/AVAILABLE TO EXPLORE/g) ?? []).length, 4);
 });
 
 test('Organic provides complete accessible sections, working directions and safe demonstration content', () => {
@@ -170,4 +171,82 @@ test('Minimal typography and CSS are isolated from Heritage and Organic', () => 
   const css = tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => readFileSync(join(root, attr(tag, 'href')), 'utf8')).join('');
   assert.match(css, /prefers-reduced-motion/);
   assert.doesNotMatch(css, /\.o-hero|\.hero-visual/);
+});
+
+test('Immersive provides all nine sections, accessible controls and safe menu/newsletter content', () => {
+  const html = readFileSync(join(root, 'immersive/index.html'), 'utf8');
+  assert.equal(tags(html, 'header').length, 1);
+  assert.equal(tags(html, 'footer').length, 1);
+  const sections = tags(html, 'section');
+  assert.equal(sections.length, 7);
+  for (const id of ['home', 'story', 'origin', 'menu', 'gallery', 'visit', 'newsletter']) {
+    const section = sections.find(tag => attr(tag, 'id') === id);
+    assert.ok(section, id);
+    assert.equal(attr(section, 'tabindex'), '-1');
+    assert.ok(attr(section, 'aria-labelledby'));
+  }
+  const buttons = tags(html, 'button');
+  const toggle = buttons.find(tag => attr(tag, 'aria-controls') === 'immersive-navigation');
+  assert.equal(attr(toggle, 'aria-expanded'), 'false');
+  for (const button of buttons) {
+    const target = attr(button, 'aria-controls');
+    if (target) assert.ok(html.includes(`id="${target}"`));
+    else assert.match(button, /\bdisabled(?:\s|>|=)/);
+  }
+  const scenes = tags(html, 'article').filter(tag => (attr(tag, 'id') ?? '').startsWith('i-scene-'));
+  assert.equal(scenes.length, 3);
+  assert.ok(scenes.every(tag => !/\bhidden(?:\s|>|=)/.test(tag)), 'All scenes must be available before JavaScript');
+  const items = tags(html, 'article').filter(tag => attr(tag, 'data-menu-item'));
+  assert.equal(items.length, 3);
+  assert.equal(new Set(items.map(tag => attr(tag, 'data-menu-item'))).size, 3);
+  assert.ok(items.every(tag => attr(tag, 'data-availability') === 'unconfirmed'));
+  for (const copy of ['Demonstration menu only', 'No orders or payments are accepted', 'Newsletter demonstration only', 'Independent website design concept', 'actual premises']) assert.ok(html.includes(copy), copy);
+  assert.doesNotMatch(html, /href="[^"\s]*(?:checkout|cart|order\/|payment)/i);
+  const images = tags(html, 'img');
+  assert.equal(images.filter(tag => attr(tag, 'loading') === 'eager').length, 1);
+  assert.ok(images.every(tag => ['lazy', 'eager'].includes(attr(tag, 'loading'))));
+  const directions = tags(html, 'a').find(tag => (attr(tag, 'href') ?? '').startsWith('https://www.google.com/maps/dir/'));
+  assert.equal(new URL(attr(directions, 'href').replaceAll('&amp;', '&')).searchParams.get('destination'), 'Seelingstraße 34, 14059 Berlin, Germany');
+});
+
+test('Immersive styles and scripts are isolated, lightweight and progressively enhanced', () => {
+  const html = readFileSync(join(root, 'immersive/index.html'), 'utf8');
+  const stylesheetPaths = html => tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => attr(tag, 'href'));
+  const css = stylesheetPaths(html).map(path => readFileSync(join(root, path), 'utf8')).join('');
+  assert.match(css, /prefers-reduced-motion/);
+  assert.doesNotMatch(css, /\.m-hero|\.o-hero|\.hero-visual/);
+  const scriptPaths = tags(html, 'script').map(tag => attr(tag, 'src'));
+  const scripts = scriptPaths.map(path => readFileSync(join(root, path), 'utf8')).join('');
+  assert.ok(Buffer.byteLength(scripts) < 10000, 'Keep Immersive client scripts below 10 KB uncompressed');
+  assert.match(scripts, /IntersectionObserver/);
+  assert.match(scripts, /prefers-reduced-motion/);
+  assert.doesNotMatch(scripts, /setInterval|fetch\(|XMLHttpRequest/);
+  for (const route of ['heritage', 'organic', 'minimal']) {
+    const prior = readFileSync(join(root, route, 'index.html'), 'utf8');
+    assert.doesNotMatch(prior, /immersive-page|immersive-navigation|espresso-/);
+    const priorCss = stylesheetPaths(prior).map(path => readFileSync(join(root, path), 'utf8')).join('');
+    assert.doesNotMatch(priorCss, /\.i-hero|\.i-scene/);
+    for (const tag of tags(prior, 'script')) assert.ok(!scriptPaths.includes(attr(tag, 'src')));
+  }
+});
+
+test('motion enhancement safely handles reduced motion and missing IntersectionObserver', () => {
+  const file = walk(join(root, '_astro')).find(path => /ImmersiveLayout.*\.js$/.test(path));
+  const code = readFileSync(file, 'utf8');
+  for (const scenario of [{ reduce: true, io: true }, { reduce: false, io: false }, { reduce: false, io: true }]) {
+    let created = 0, observed = 0, disconnected = 0, onChange;
+    const media = { matches: scenario.reduce, addEventListener: (_, fn) => { onChange = fn; } };
+    class Observer { constructor() { created++; } observe() { observed++; } disconnect() { disconnected++; } }
+    runInNewContext(code, {
+      matchMedia: () => media,
+      document: { querySelectorAll: () => [{ hasAttribute: () => false }] },
+      window: scenario.io ? { IntersectionObserver: Observer } : {},
+      IntersectionObserver: Observer,
+    });
+    const enabled = !scenario.reduce && scenario.io;
+    assert.equal(created, enabled ? 1 : 0);
+    assert.equal(observed, enabled ? 1 : 0);
+    media.matches = true; onChange();
+    assert.equal(disconnected, enabled ? 1 : 0, 'Changing to reduced motion disconnects the observer');
+  }
 });

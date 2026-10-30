@@ -1,0 +1,22 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/immersive/Header.astro';
+import Footer from '../components/immersive/Footer.astro';
+import '../styles/immersive.css';
+---
+<BaseLayout title="Kalma Immersive — A moment worth tasting" description="Guatemalan coffee, Berlin soul and unhurried moments. Explore Kalma Immersive, an independent cinematic café website concept." class="immersive-page"><Header /><main id="main" tabindex="-1"><slot /></main><Footer /></BaseLayout>
+<script>
+  // Enhancement only: content stays visible before JS, without IO, or with reduced motion.
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const elements = [...document.querySelectorAll<HTMLElement>('[data-i-reveal]')];
+  let observer: IntersectionObserver | undefined;
+  const setup = () => {
+    observer?.disconnect();
+    if (motion.matches || !('IntersectionObserver' in window)) return;
+    observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) { entry.target.setAttribute('data-i-seen', ''); observer?.unobserve(entry.target); }
+    }, { threshold: .12 });
+    for (const element of elements) if (!element.hasAttribute('data-i-seen')) observer.observe(element);
+  };
+  motion.addEventListener('change', setup); setup();
+</script>

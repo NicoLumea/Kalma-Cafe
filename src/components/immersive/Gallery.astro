@@ -1,0 +1,10 @@
+---
+import Photo from '../shared/Photo.astro';
+import { photos } from '../../data/images';
+import { minimalPhotos } from '../../data/minimal';
+---
+<section id="gallery" class="i-gallery" tabindex="-1" aria-labelledby="i-gallery-title">
+  <div class="i-gallery-wide" data-i-reveal><Photo photo={photos.atmosphere} sizes="100vw" /><div class="i-gallery-title i-shell"><p class="i-kicker">04 / THE ATMOSPHERE</p><h2 id="i-gallery-title">Stay a<br /><em>little longer.</em></h2><p>An imagined feeling.<br />Light, conversation, the comfort of a cup.</p></div><span class="i-gallery-stamp">STOCK ATMOSPHERE STUDY / NOT KALMA’S PREMISES</span></div>
+  <div class="i-gallery-pair i-shell"><figure data-i-reveal><Photo photo={minimalPhotos.brewing} sizes="(max-width: 700px) 85vw, 40vw" /><figcaption>01 / THE QUIET IN THE EVERYDAY</figcaption></figure><div class="i-gallery-aside"><p>Less rush.<br /><em>More presence.</em></p><figure data-i-reveal><Photo photo={photos.ritual} sizes="(max-width: 700px) 65vw, 30vw" /><figcaption>02 / A MOMENT, SHARED</figcaption></figure></div></div>
+  <p class="i-note i-shell i-gallery-disclosure">Licensed stock photographs convey an imagined atmosphere. They are not photographs of Café Kalma’s actual premises or confirmed products.</p>
+</section>

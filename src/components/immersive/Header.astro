@@ -1,0 +1,42 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { immersiveNavigation } from '../../data/immersive';
+---
+<header class="i-header">
+  <div class="i-concept-line"><span>INDEPENDENT WEBSITE CONCEPT</span><a href="/">All concepts <span aria-hidden="true">↗</span></a></div>
+  <div class="i-header-inner i-shell"><Wordmark href="/immersive/" light /><button class="i-toggle" type="button" aria-expanded="false" aria-controls="immersive-navigation">Menu <span aria-hidden="true">＋</span></button>
+    <nav id="immersive-navigation" aria-label="Main navigation">{immersiveNavigation.map((item, index) => <a href={item.href} aria-current={index === 0 ? 'location' : undefined} class:list={{ 'i-nav-visit': item.href === '#visit' }}>{item.label}{item.href === '#visit' && <span aria-hidden="true">↗</span>}</a>)}</nav>
+  </div><div class="i-progress" aria-hidden="true"></div>
+</header>
+<script>
+  const header = document.querySelector<HTMLElement>('.i-header');
+  const toggle = document.querySelector<HTMLButtonElement>('.i-toggle');
+  const nav = document.querySelector<HTMLElement>('#immersive-navigation');
+  const mobile = matchMedia('(max-width: 900px)');
+  if (header && toggle && nav) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+    const targets = links.map(link => document.querySelector<HTMLElement>(new URL(link.href).hash));
+    const open = (state: boolean, focus = false) => {
+      toggle.setAttribute('aria-expanded', String(state)); nav.toggleAttribute('data-open', state);
+      header.toggleAttribute('data-menu-open', state); nav.inert = mobile.matches && !state;
+      if (focus) toggle.focus();
+    };
+    const update = () => {
+      header.toggleAttribute('data-scrolled', scrollY > 50);
+      const travel = document.documentElement.scrollHeight - innerHeight;
+      header.style.setProperty('--i-progress', String(travel > 0 ? Math.min(1, scrollY / travel) : 0));
+      let current = 0;
+      targets.forEach((el, i) => { if (el && el.getBoundingClientRect().top <= header.offsetHeight + 100) current = i; });
+      links.forEach((link, i) => { if (i === current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); });
+    };
+    document.documentElement.classList.add('immersive-nav-ready'); open(false); update();
+    toggle.addEventListener('click', () => open(toggle.getAttribute('aria-expanded') !== 'true'));
+    links.forEach((link, i) => link.addEventListener('click', () => { open(false); targets[i]?.focus({ preventScroll: true }); }));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') open(false, true); });
+    for (const type of ['click', 'focusin']) document.addEventListener(type, event => { if (event.target instanceof Node && !header.contains(event.target)) open(false); });
+    mobile.addEventListener('change', () => { open(false); update(); });
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { update(); queued = false; }); } }, { passive: true });
+    addEventListener('resize', update);
+  }
+</script>

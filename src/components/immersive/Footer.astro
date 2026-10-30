@@ -1,0 +1,6 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { business } from '../../data/business';
+import { immersiveNavigation } from '../../data/immersive';
+---
+<footer class="i-footer i-shell"><div class="i-footer-top"><Wordmark href="/immersive/" light /><p>A moment worth<br /><em>experiencing.</em></p><a class="i-back-top" href="#home">Back to the moment <span aria-hidden="true">↑</span></a></div><div class="i-footer-grid"><nav aria-label="Footer navigation">{immersiveNavigation.map(item => <a href={item.href}>{item.label}</a>)}</nav><address>{business.address.street}<br />{business.address.city}, {business.address.country}</address><a class="i-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div><div class="i-footer-bottom"><p>{business.notice}</p><div><a href="/concept-notice/#legal">Legal notice (placeholder)</a><a href="/concept-notice/#privacy">Privacy & demo details</a><a href="/">04 / IMMERSIVE</a></div></div></footer>

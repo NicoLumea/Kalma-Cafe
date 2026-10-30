@@ -1,6 +1,6 @@
 # Café Kalma — Digital Concepts
 
-An independent client-presentation project. **Not affiliated with Café Kalma and not an official business website.** Kalma Heritage, Kalma Organic and Kalma Minimal offer three distinct forest-green and cream designs, with a shared concept-selection page.
+An independent client-presentation project. **Not affiliated with Café Kalma and not an official business website.** Kalma Heritage, Kalma Organic, Kalma Minimal and Kalma Immersive offer four distinct forest-green and cream designs, with a shared concept-selection page.
 
 ## Development
 
@@ -23,11 +23,11 @@ The production output is `dist/`. `npm run preview` serves that build. `npm inst
 
 | URL | Status |
 | --- | --- |
-| `/` | Four-concept presentation; Heritage, Organic and Minimal are available |
+| `/` | Four-concept presentation; all four concepts are available |
 | `/heritage/` | Complete Heritage homepage |
 | `/organic/` | Complete Organic homepage |
 | `/minimal/` | Complete Minimal homepage |
-| `/immersive/` | Reserved route; coming soon only |
+| `/immersive/` | Complete Immersive homepage |
 | `/concept-notice/` | Concept scope, privacy details and legal placeholder |
 | `/404.html` | Static error page |
 
@@ -38,13 +38,14 @@ The production output is `dist/`. `npm run preview` serves that build. `npm inst
 - `src/components/heritage/`: accessible responsive navigation, menu item and footer.
 - `src/components/organic/`: independent navigation, botanical illustration, menu item, newsletter and footer.
 - `src/components/minimal/`: independent numbered navigation, editorial menu, demo newsletter and footer.
-- `src/components/presentation/`: shared future-concept placeholder.
-- `src/layouts/`: global metadata with optional head assets, and independent Heritage/Organic/Minimal frames.
+- `src/components/immersive/`: cinematic hero, navigation, keyboard-controlled story scenes, menu, gallery, demo newsletter and footer.
+- `src/components/presentation/`: retained reusable concept-placeholder component.
+- `src/layouts/`: global metadata with optional head assets, and independent Heritage/Organic/Minimal/Immersive frames.
 - `src/styles/`: design tokens, shared styles and isolated concept styling.
 - `public/assets/`: local photographs, fonts and provisional branding; no runtime image/font services.
 - `scripts/site.test.mjs`: post-build route, link, asset and demonstration-safety checks.
 
-Immersive retains its reserved coming-soon route; its design is not implemented. New concepts can reuse shared business data and components while providing distinct layouts and styles.
+All four concepts are complete and reuse shared business facts, local images and the temporary wordmark while retaining their own layouts and styles.
 
 ## Content and demo boundaries
 
@@ -56,8 +57,8 @@ The newsletter is disabled, has no form action, and cannot accept or submit emai
 
 All demonstration pages have `noindex, nofollow`; `robots.txt` disallows crawling and Cloudflare headers repeat the indexing instruction. These controls are **not access control**. Use a private preview/access restriction for client-only circulation if deployment is authorized later.
 
-See [asset and source records](docs/ASSETS.md), [Heritage verification](docs/VERIFICATION.md), [Organic implementation and verification](docs/ORGANIC.md), [Minimal implementation and verification](docs/MINIMAL.md), and [Cloudflare setup](docs/CLOUDFLARE.md). The legal notice is explicitly a placeholder; it must be replaced with the correct concept operator details before a public commercial launch.
+See [asset and source records](docs/ASSETS.md), [Heritage verification](docs/VERIFICATION.md), [Organic implementation and verification](docs/ORGANIC.md), [Minimal implementation and verification](docs/MINIMAL.md), [Immersive implementation and verification](docs/IMMERSIVE.md), and [Cloudflare setup](docs/CLOUDFLARE.md). The legal notice is explicitly a placeholder; it must be replaced with the correct concept operator details before a public commercial launch.
 
 ## Repository workflow
 
-Repository: `NicoLumea/Kalma-Cafe`. Phase 3 branch: `feature/kalma-minimal`, based on main after merged Organic PR #2 (`7a00703ecbeb281a2d629dff674f886ac6b2b12c`). Review through a pull request targeting `main`; do not merge automatically or deploy directly to production. Publishing the feature branch triggers the existing Cloudflare preview build. This repository remains the source for all four planned concepts.
+Repository: `NicoLumea/Kalma-Cafe`. Phase 4 branch: `feature/kalma-immersive`, based on main after merged Minimal PR #3 (`a051c85ec0f6b342934a2b8cb7ae4192ced8313d`). Review through a pull request targeting `main`; do not merge automatically or deploy directly to production. Publishing the feature branch triggers the existing Cloudflare preview build. This repository remains the source for all four planned concepts.
