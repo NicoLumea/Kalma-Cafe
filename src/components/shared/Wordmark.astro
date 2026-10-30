@@ -1,0 +1,8 @@
+---
+interface Props { href?: string; light?: boolean; }
+const { href = '/heritage/', light = false } = Astro.props;
+---
+<a class:list={['wordmark', { 'wordmark--light': light }]} href={href} aria-label="Kalma concept home">
+  <span class="wordmark-name">kalma<span class="wordmark-star" aria-hidden="true">✳</span></span>
+  <span class="wordmark-tagline">COFFEE & LITTLE MOMENTS</span>
+</a>

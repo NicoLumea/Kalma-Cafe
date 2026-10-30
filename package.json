@@ -1,0 +1,16 @@
+{
+  "name": "kalma-cafe-concepts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24 <25" },
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "check": "astro check",
+    "test": "node --test scripts/site.test.mjs"
+  },
+  "dependencies": { "astro": "7.4.4" },
+  "devDependencies": { "@astrojs/check": "^0.9.4", "typescript": "^5.9.3" }
+}

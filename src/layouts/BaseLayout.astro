@@ -1,0 +1,27 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+interface Props { title: string; description: string; class?: string; }
+const { title, description, class: className } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#214B32" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/assets/branding/kalma-concept.svg" />
+    <link rel="stylesheet" href="/assets/fonts/cormorant-garamond.css" />
+    <link rel="stylesheet" href="/assets/fonts/dm-sans.css" />
+    <title>{title}</title>
+  </head>
+  <body class={className}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

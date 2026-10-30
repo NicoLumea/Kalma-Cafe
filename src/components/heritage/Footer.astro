@@ -1,0 +1,10 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { business } from '../../data/business';
+import { navigation } from '../../data/navigation';
+---
+<footer class="site-footer">
+  <div class="footer-top"><Wordmark light /><p>Guatemalan soul.<br />Berlin rhythm.</p><a class="text-link light-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Find Kalma on Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div>
+  <div class="footer-middle"><nav aria-label="Footer navigation">{navigation.map(({ label, href }) => <a href={href}>{label}</a>)}</nav><address>{business.address.street}<br />{business.address.city}, {business.address.country}</address></div>
+  <div class="footer-bottom"><p>{business.notice}</p><div><a href="/concept-notice/#legal">Legal notice (placeholder)</a><a href="/concept-notice/#privacy">Privacy & demo details</a><a href="/">Concept 01 / Heritage</a></div></div>
+</footer>
