@@ -1,8 +1,12 @@
 ---
 import '../styles/tokens.css';
 import '../styles/global.css';
+import ConceptSwitcher from '../components/presentation/ConceptSwitcher.astro';
+import { presentationConfig } from '../data/presentation';
+import { switcherConcepts } from '../data/concepts';
 interface Props { title: string; description: string; class?: string; }
 const { title, description, class: className } = Astro.props;
+const currentConcept = switcherConcepts.find(concept => concept.href.replace(/\/$/, '') === Astro.url.pathname.replace(/\/$/, ''));
 ---
 <!doctype html>
 <html lang="en">
@@ -24,5 +28,6 @@ const { title, description, class: className } = Astro.props;
   <body class={className}>
     <a class="skip-link" href="#main">Skip to content</a>
     <slot />
+    {presentationConfig.enabled && currentConcept && <ConceptSwitcher concepts={switcherConcepts} currentId={currentConcept.id} allConceptsHref={presentationConfig.allConceptsHref} />}
   </body>
 </html>

@@ -13,6 +13,7 @@ assert.ok(existsSync(root), 'Run npm run build before npm test');
 const pages = walk(root).filter(path => path.endsWith('.html'));
 const attr = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
 const tags = (html, name) => html.match(new RegExp(`<${name}\\b[^>]*>`, 'g')) ?? [];
+const withoutSwitcher = html => html.replace(/\s*<aside class="cs-root"[\s\S]*?<\/aside>/g, '');
 
 test('all planned routes exist; every page is noindex with one primary heading', () => {
   for (const route of ['', 'heritage/', 'organic/', 'minimal/', 'immersive/', 'concept-notice/']) assert.ok(existsSync(join(root, route, 'index.html')), route);
@@ -129,7 +130,7 @@ test('Organic styling and font are isolated from Heritage', () => {
 });
 
 test('Minimal has complete sections, accessible navigation and demonstration-only controls', () => {
-  const html = readFileSync(join(root, 'minimal/index.html'), 'utf8');
+  const html = withoutSwitcher(readFileSync(join(root, 'minimal/index.html'), 'utf8'));
   for (const id of ['home', 'story', 'origin', 'menu', 'gallery', 'visit']) {
     const section = tags(html, 'section').find(tag => attr(tag, 'id') === id);
     assert.ok(section, `Missing Minimal section: ${id}`);
@@ -165,7 +166,7 @@ test('Minimal typography and CSS are isolated from Heritage and Organic', () => 
     const css = tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => readFileSync(join(root, attr(tag, 'href')), 'utf8')).join('');
     assert.doesNotMatch(css, /\.m-hero|\.m-header/);
   }
-  const html = readFileSync(join(root, 'minimal/index.html'), 'utf8');
+  const html = withoutSwitcher(readFileSync(join(root, 'minimal/index.html'), 'utf8'));
   assert.match(html, /instrument-serif\.css/);
   assert.match(html, /class="minimal-page"/);
   const css = tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => readFileSync(join(root, attr(tag, 'href')), 'utf8')).join('');
@@ -174,7 +175,7 @@ test('Minimal typography and CSS are isolated from Heritage and Organic', () => 
 });
 
 test('Immersive provides all nine sections, accessible controls and safe menu/newsletter content', () => {
-  const html = readFileSync(join(root, 'immersive/index.html'), 'utf8');
+  const html = withoutSwitcher(readFileSync(join(root, 'immersive/index.html'), 'utf8'));
   assert.equal(tags(html, 'header').length, 1);
   assert.equal(tags(html, 'footer').length, 1);
   const sections = tags(html, 'section');
@@ -210,7 +211,7 @@ test('Immersive provides all nine sections, accessible controls and safe menu/ne
 });
 
 test('Immersive styles and scripts are isolated, lightweight and progressively enhanced', () => {
-  const html = readFileSync(join(root, 'immersive/index.html'), 'utf8');
+  const html = withoutSwitcher(readFileSync(join(root, 'immersive/index.html'), 'utf8'));
   const stylesheetPaths = html => tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => attr(tag, 'href'));
   const css = stylesheetPaths(html).map(path => readFileSync(join(root, path), 'utf8')).join('');
   assert.match(css, /prefers-reduced-motion/);
@@ -249,4 +250,61 @@ test('motion enhancement safely handles reduced motion and missing IntersectionO
     media.matches = true; onChange();
     assert.equal(disconnected, enabled ? 1 : 0, 'Changing to reduced motion disconnects the observer');
   }
+});
+
+test('one reusable switcher appears on every concept with correct links and current page', () => {
+  const routes = ['heritage', 'organic', 'minimal', 'immersive'];
+  const assets = new Set();
+  for (const route of routes) {
+    const html = readFileSync(join(root, route, 'index.html'), 'utf8');
+    assert.equal((html.match(/data-concept-switcher/g) ?? []).length, 1);
+    const markup = html.match(/<aside class="cs-root"[\s\S]*?<\/aside>/)?.[0];
+    assert.ok(markup);
+    const links = tags(markup, 'a');
+    assert.deepEqual(links.map(tag => attr(tag, 'href')), [...routes.map(name => `/${name}/`), '/']);
+    const current = links.filter(tag => attr(tag, 'aria-current') === 'page');
+    assert.equal(current.length, 1);
+    assert.equal(attr(current[0], 'href'), `/${route}/`);
+    assert.match(markup, /Currently viewing/);
+    const launch = tags(markup, 'button').find(tag => /data-cs-launch/.test(tag));
+    const dialog = tags(markup, 'dialog')[0];
+    assert.equal(attr(launch, 'aria-expanded'), 'false');
+    assert.equal(attr(launch, 'aria-haspopup'), 'dialog');
+    assert.equal(attr(launch, 'aria-controls'), attr(dialog, 'id'));
+    assert.ok(markup.includes(`id="${attr(dialog, 'aria-labelledby')}"`));
+    assert.match(markup, /<details/);
+    assert.match(markup, /<summary/);
+    for (const tag of [...tags(markup, 'link'), ...tags(markup, 'script')]) assets.add(attr(tag, 'src') ?? attr(tag, 'href'));
+  }
+  assert.equal(assets.size, 2, 'One shared stylesheet and one shared script');
+  for (const path of ['index.html','concept-notice/index.html','404.html']) assert.doesNotMatch(readFileSync(join(root,path),'utf8'), /data-concept-switcher|ConceptSwitcher.*\.css|concept-switcher.*\.js/);
+});
+
+test('presentation disabled build omits switcher markup and asset requests', async () => {
+  const { mkdtempSync, rmSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { execFileSync } = await import('node:child_process');
+  const output = mkdtempSync(join(tmpdir(), 'kalma-presentation-off-'));
+  try {
+    execFileSync(process.execPath, ['node_modules/astro/bin/astro.mjs','build','--outDir',output], { env: { ...process.env, PRESENTATION_MODE: 'off' }, stdio: 'pipe' });
+    for (const route of ['heritage','organic','minimal','immersive']) {
+      const disabled = readFileSync(join(output,route,'index.html'),'utf8');
+      assert.doesNotMatch(disabled, /data-concept-switcher|cs-launch|ConceptSwitcher.*\.css|concept-switcher.*\.js/);
+      const enabled = withoutSwitcher(readFileSync(join(root,route,'index.html'),'utf8'));
+      const normalize = html => html.replace(/>\s+</g,'><').trim();
+      assert.equal(normalize(disabled), normalize(enabled), `${route}: disabling presentation preserves the underlying output`);
+    }
+  } finally { rmSync(output, { recursive: true, force: true }); }
+});
+
+test('switcher keyboard focus wraps at both ends for any concept count', async () => {
+  const { focusWrapTarget } = await import('../src/scripts/concept-switcher.js');
+  for (const count of [2,3,4,7]) {
+    const controls = Array.from({length: count + 2}, () => ({}));
+    assert.equal(focusWrapTarget(controls, controls[0], true), controls.at(-1));
+    assert.equal(focusWrapTarget(controls, controls.at(-1), false), controls[0]);
+    assert.equal(focusWrapTarget(controls, controls[1], false), undefined);
+    assert.equal(focusWrapTarget(controls, {}, false), controls[0]);
+  }
+  assert.equal(focusWrapTarget([], {}, false), undefined);
 });
