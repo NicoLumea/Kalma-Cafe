@@ -1,0 +1,12 @@
+---
+import Photo from '../shared/Photo.astro';
+import type { MenuItem } from '../../data/menu';
+interface Props { item: MenuItem; index: number; }
+const { item, index } = Astro.props;
+---
+<article class="o-menu-item" data-menu-item={item.id}>
+  <div class="o-menu-photo"><Photo photo={item.image} sizes="(max-width: 650px) 90vw, 30vw" /><span class="o-item-number" aria-hidden="true">0{index + 1}</span></div>
+  <div class="o-item-meta"><span>{item.category}</span><span>ILLUSTRATIVE</span></div>
+  <h3>{item.name}</h3><p>{item.description}</p>
+  {item.price && <p class="o-item-price">{new Intl.NumberFormat('en-DE', { style: 'currency', currency: item.price.currency }).format(item.price.amount)}</p>}
+</article>

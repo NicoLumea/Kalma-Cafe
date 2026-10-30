@@ -1,0 +1,39 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { organicNavigation } from '../../data/organic';
+---
+<div class="o-concept-bar"><span>AN INDEPENDENT DESIGN CONCEPT</span><a href="/">Explore the collection <span aria-hidden="true">↗</span></a></div>
+<header class="o-header">
+  <div class="o-header-inner">
+    <Wordmark href="/organic/" />
+    <button class="o-menu-toggle" type="button" aria-expanded="false" aria-controls="organic-navigation">Menu <span aria-hidden="true">＋</span></button>
+    <nav id="organic-navigation" aria-label="Main navigation">
+      <div class="o-nav-start">{organicNavigation.slice(0, 2).map(item => <a href={item.href}>{item.label}</a>)}</div>
+      <div class="o-nav-end">{organicNavigation.slice(2).map(item => <a href={item.href}>{item.label}</a>)}</div>
+    </nav>
+  </div>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.o-menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#organic-navigation');
+  const mobile = window.matchMedia('(max-width: 900px)');
+  if (toggle && nav) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.toggleAttribute('data-open', open);
+      nav.inert = mobile.matches && !open;
+      if (returnFocus) toggle.focus();
+    };
+    document.documentElement.classList.add('organic-nav-ready');
+    setOpen(false);
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      setOpen(false);
+      document.getElementById(new URL(link.href).hash.slice(1))?.focus({ preventScroll: true });
+    }));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') setOpen(false, true); });
+    document.addEventListener('click', event => { if (event.target instanceof Node && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false); });
+    document.addEventListener('focusin', event => { if (event.target instanceof Node && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false); });
+    mobile.addEventListener('change', () => setOpen(false));
+  }
+</script>

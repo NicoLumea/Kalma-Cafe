@@ -1,0 +1,9 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { business } from '../../data/business';
+import { organicNavigation } from '../../data/organic';
+---
+<footer class="o-footer"><div class="o-shell">
+  <div class="o-footer-top"><div><Wordmark href="/organic/" light /><p>A little less rush.<br />A little more Kalma.</p></div><nav aria-label="Footer navigation">{organicNavigation.map(item => <a href={item.href}>{item.label}</a>)}</nav><div class="o-footer-address"><p class="o-kicker">GUATEMALAN COFFEE · BERLIN</p><address>{business.address.street}<br />{business.address.city}, {business.address.country}</address><a class="o-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div></div>
+  <div class="o-footer-bottom"><p>{business.notice}</p><div><a href="/concept-notice/#legal">Legal notice (placeholder)</a><a href="/concept-notice/#privacy">Privacy & demo details</a><a href="/">Concept 02 / Organic</a></div></div>
+</div></footer>

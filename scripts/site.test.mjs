@@ -78,9 +78,50 @@ test('no operational forms, active email collection, third-party scripts or remo
   }
 });
 
-test('only Heritage is linked from the concept gallery', () => {
+test('only completed Heritage and Organic concepts are linked from the gallery', () => {
   const home = readFileSync(join(root, 'index.html'), 'utf8');
-  for (const route of ['organic', 'minimal', 'immersive']) assert.doesNotMatch(home, new RegExp(`href="/${route}`));
+  for (const route of ['minimal', 'immersive']) assert.doesNotMatch(home, new RegExp(`href="/${route}`));
   assert.match(home, /href="\/heritage\/"/);
-  assert.equal((home.match(/COMING SOON/g) ?? []).length, 3);
+  assert.match(home, /href="\/organic\/"/);
+  assert.equal((home.match(/COMING SOON/g) ?? []).length, 2);
+  assert.equal((home.match(/AVAILABLE TO EXPLORE/g) ?? []).length, 2);
+});
+
+test('Organic provides complete accessible sections, working directions and safe demonstration content', () => {
+  const html = readFileSync(join(root, 'organic/index.html'), 'utf8');
+  for (const id of ['home', 'story', 'origin', 'menu', 'gallery', 'visit']) {
+    const section = tags(html, 'section').find(tag => attr(tag, 'id') === id);
+    assert.ok(section, `Missing Organic section: ${id}`);
+    assert.equal(attr(section, 'tabindex'), '-1', `Section must receive navigation focus: ${id}`);
+    assert.ok(attr(section, 'aria-labelledby'), `Section must have a heading: ${id}`);
+  }
+  const toggle = tags(html, 'button').find(tag => attr(tag, 'aria-controls') === 'organic-navigation');
+  assert.equal(attr(toggle, 'aria-expanded'), 'false');
+  assert.match(html, /Newsletter demonstration only/);
+  assert.match(html, /Independent website design concept/);
+  assert.match(html, /not Café Kalma’s official menu/);
+  assert.match(html, /do not show Café Kalma’s premises/);
+  const directions = tags(html, 'a').find(tag => (attr(tag, 'href') ?? '').startsWith('https://www.google.com/maps/dir/'));
+  assert.ok(directions);
+  assert.equal(new URL(attr(directions, 'href').replaceAll('&amp;', '&')).searchParams.get('destination'), 'Seelingstraße 34, 14059 Berlin, Germany');
+  const items = tags(html, 'article').filter(tag => attr(tag, 'data-menu-item'));
+  assert.equal(items.length, 3);
+  const photos = tags(html, 'img');
+  assert.equal(photos.filter(tag => attr(tag, 'loading') === 'eager').length, 1);
+  assert.ok(photos.every(tag => ['lazy', 'eager'].includes(attr(tag, 'loading'))));
+  const newsletterButton = tags(html, 'button').find(tag => /\bdisabled(?:\s|>|=)/.test(tag));
+  assert.ok(newsletterButton);
+});
+
+test('Organic styling and font are isolated from Heritage', () => {
+  const heritage = readFileSync(join(root, 'heritage/index.html'), 'utf8');
+  const organic = readFileSync(join(root, 'organic/index.html'), 'utf8');
+  assert.doesNotMatch(heritage, /fraunces|organic-page|organic-navigation/);
+  assert.match(organic, /fraunces\.css/);
+  assert.match(organic, /class="organic-page"/);
+  const cssLinks = html => tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => attr(tag, 'href'));
+  const heritageCss = cssLinks(heritage).map(file => readFileSync(join(root, file), 'utf8')).join('');
+  assert.doesNotMatch(heritageCss, /\.o-hero/);
+  const organicCss = cssLinks(organic).map(file => readFileSync(join(root, file), 'utf8')).join('');
+  assert.match(organicCss, /prefers-reduced-motion/);
 });

@@ -1,6 +1,6 @@
 # Café Kalma — Digital Concepts
 
-An independent client-presentation project. **Not affiliated with Café Kalma and not an official business website.** Phase 1 implements Kalma Heritage in forest green and cream with a separate concept-selection page.
+An independent client-presentation project. **Not affiliated with Café Kalma and not an official business website.** Kalma Heritage and Kalma Organic offer two distinct forest-green and cream designs, with a shared concept-selection page.
 
 ## Development
 
@@ -23,9 +23,9 @@ The production output is `dist/`. `npm run preview` serves that build. `npm inst
 
 | URL | Status |
 | --- | --- |
-| `/` | Four-concept presentation; only Heritage is clickable |
+| `/` | Four-concept presentation; Heritage and Organic are available |
 | `/heritage/` | Complete Heritage homepage |
-| `/organic/` | Reserved route; coming soon only |
+| `/organic/` | Complete Organic homepage |
 | `/minimal/` | Reserved route; coming soon only |
 | `/immersive/` | Reserved route; coming soon only |
 | `/concept-notice/` | Concept scope, privacy details and legal placeholder |
@@ -33,16 +33,17 @@ The production output is `dist/`. `npm run preview` serves that build. `npm inst
 
 ## Architecture
 
-- `src/data/`: centralized business facts, navigation, imagery, menu examples, concept metadata and Heritage copy.
+- `src/data/`: centralized business facts, navigation, imagery, menu examples, concept metadata and concept-specific copy.
 - `src/components/shared/`: replaceable temporary wordmark and responsive local-image component.
 - `src/components/heritage/`: accessible responsive navigation, menu item and footer.
+- `src/components/organic/`: independent navigation, botanical illustration, menu item, newsletter and footer.
 - `src/components/presentation/`: shared future-concept placeholder.
-- `src/layouts/`: global metadata and Heritage frame.
+- `src/layouts/`: global metadata with optional head assets, and independent Heritage/Organic frames.
 - `src/styles/`: design tokens, shared styles and isolated concept styling.
 - `public/assets/`: local photographs, fonts and provisional branding; no runtime image/font services.
 - `scripts/site.test.mjs`: post-build route, link, asset and demonstration-safety checks.
 
-The other concepts have metadata and reserved routes only; their designs are not implemented. New concepts can reuse shared business data and components while providing distinct layouts and styles.
+Minimal and Immersive have metadata and reserved routes only; their designs are not implemented. New concepts can reuse shared business data and components while providing distinct layouts and styles.
 
 ## Content and demo boundaries
 
@@ -54,8 +55,8 @@ The newsletter is disabled, has no form action, and cannot accept or submit emai
 
 All demonstration pages have `noindex, nofollow`; `robots.txt` disallows crawling and Cloudflare headers repeat the indexing instruction. These controls are **not access control**. Use a private preview/access restriction for client-only circulation if deployment is authorized later.
 
-See [asset and source records](docs/ASSETS.md), [verification](docs/VERIFICATION.md), and [Cloudflare setup](docs/CLOUDFLARE.md). The legal notice is explicitly a placeholder; it must be replaced with the correct concept operator details before a public commercial launch.
+See [asset and source records](docs/ASSETS.md), [Heritage verification](docs/VERIFICATION.md), [Organic implementation and verification](docs/ORGANIC.md), and [Cloudflare setup](docs/CLOUDFLARE.md). The legal notice is explicitly a placeholder; it must be replaced with the correct concept operator details before a public commercial launch.
 
 ## Repository workflow
 
-Repository: `NicoLumea/Kalma-Cafe`. Implementation branch: `feature/kalma-heritage`. Review through a pull request targeting `main`; do not merge or deploy automatically. This repository remains the source for all four planned concepts.
+Repository: `NicoLumea/Kalma-Cafe`. Phase 2 branch: `feature/kalma-organic`, based on merged Heritage PR #1. Review through a pull request targeting `main`; do not merge automatically or deploy directly to production. Publishing the feature branch triggers the existing Cloudflare preview build. This repository remains the source for all four planned concepts.

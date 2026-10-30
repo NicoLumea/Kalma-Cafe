@@ -18,6 +18,7 @@ const { title, description, class: className } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/assets/branding/kalma-concept.svg" />
     <link rel="stylesheet" href="/assets/fonts/cormorant-garamond.css" />
     <link rel="stylesheet" href="/assets/fonts/dm-sans.css" />
+    <slot name="head" />
     <title>{title}</title>
   </head>
   <body class={className}>

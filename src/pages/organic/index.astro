@@ -1,4 +1,36 @@
 ---
-import ComingSoon from '../../components/presentation/ComingSoon.astro';
+import OrganicLayout from '../../layouts/OrganicLayout.astro';
+import Photo from '../../components/shared/Photo.astro';
+import Botanical from '../../components/organic/Botanical.astro';
+import MenuItem from '../../components/organic/MenuItem.astro';
+import Newsletter from '../../components/organic/Newsletter.astro';
+import { business } from '../../data/business';
+import { photos } from '../../data/images';
+import { organic as copy, organicMenu } from '../../data/organic';
 ---
-<ComingSoon name="Kalma Organic" number="02" />
+<OrganicLayout>
+  <section class="o-hero o-shell" id="home" tabindex="-1" aria-labelledby="organic-hero-title">
+    <div class="o-hero-copy"><p class="o-kicker">GUATEMALAN ROOTS. A BERLIN CHAPTER.</p><h1 id="organic-hero-title">A moment<br />worth <span>tasting.</span></h1><p class="o-hero-intro">{copy.introduction}</p><div class="o-actions"><a class="o-button" href="#story">Explore Kalma <span aria-hidden="true">↗</span></a><a class="o-link" href="#visit">Find Us <span aria-hidden="true">↗</span></a></div><div class="o-hero-small"><span aria-hidden="true">↓</span> A LITTLE LESS RUSH. A LITTLE MORE KALMA.</div></div>
+    <figure class="o-hero-visual"><div class="o-hero-orbit" aria-hidden="true"></div><Photo class="o-hero-image" photo={photos.pour} eager sizes="(max-width: 700px) 90vw, 50vw" /><Botanical class="o-hero-botanical" /><span class="o-hero-stamp" aria-hidden="true">take a<br /><i>little moment.</i></span><figcaption>COFFEE, COMPANY & POSSIBILITY / STOCK PHOTOGRAPHY</figcaption></figure>
+  </section>
+
+  <section class="o-story o-shell" id="story" tabindex="-1" aria-labelledby="organic-story-title">
+    <div class="o-story-visual"><Photo photo={photos.ritual} sizes="(max-width: 700px) 85vw, 35vw" /><span class="o-image-caption">01 / A pause in the everyday</span></div>
+    <div class="o-story-copy"><p class="o-kicker">OUR STORY, REIMAGINED</p><h2 id="organic-story-title">A place to<br /><span>slow down.</span></h2><p>{copy.story}</p><p class="o-story-aside">The warmth of a cup.<br />The ease of good company.</p><a class="o-link" href="#origin">Follow the coffee <span aria-hidden="true">↓</span></a><Botanical /></div>
+  </section>
+
+  <section class="o-origin" id="origin" tabindex="-1" aria-labelledby="organic-origin-title">
+    <div class="o-shell"><div class="o-origin-heading"><p class="o-kicker">ROOTED IN SOMETHING REAL</p><h2 id="organic-origin-title">Coffee from Guatemala.<br /><span>A connection, carried closer.</span></h2></div><div class="o-origin-composition"><figure class="o-origin-photo"><Photo photo={photos.beans} sizes="(max-width: 700px) 90vw, 60vw" /><figcaption>ROASTED COFFEE / ILLUSTRATIVE ORIGIN STUDY</figcaption></figure><div class="o-origin-copy"><span class="o-origin-symbol" aria-hidden="true">✳</span><p>{copy.origin}</p><div class="o-origin-route"><span>Guatemala</span><span aria-hidden="true">↗</span><span>Berlin</span></div><p class="o-note">A celebration of Kalma’s stated origin. No particular farm, grower, certification or sourcing practice is represented by this concept or its imagery.</p></div></div></div>
+  </section>
+
+  <section class="o-menu o-shell" id="menu" tabindex="-1" aria-labelledby="organic-menu-title">
+    <div class="o-section-heading"><div><p class="o-kicker">COFFEE & KITCHEN</p><h2 id="organic-menu-title">Simple things.<br /><span>Lovely moments.</span></h2></div><p>A little inspiration for the table.<br />Coffee, something baked, a slower start.</p></div>
+    <div class="o-menu-grid">{organicMenu.map((item, index) => <MenuItem item={item} index={index} />)}</div><p class="o-disclosure">{copy.menuNotice}</p>
+  </section>
+
+  <section class="o-gallery" id="gallery" tabindex="-1" aria-labelledby="organic-gallery-title"><div class="o-shell"><div class="o-gallery-heading"><p class="o-kicker">MOMENTS AT KALMA / A VISUAL STUDY</p><h2 id="organic-gallery-title">The feeling of<br /><span>being here.</span></h2><p>Soft light. Something warm.<br />A little room to simply be.</p></div><div class="o-gallery-composition"><figure class="o-gallery-space"><Photo photo={photos.atmosphere} sizes="(max-width: 700px) 90vw, 40vw" /><figcaption>01 — A sense of welcome</figcaption></figure><figure class="o-gallery-cup"><Photo photo={photos.ritual} sizes="(max-width: 700px) 55vw, 25vw" /><figcaption>02 — The everyday ritual</figcaption></figure><figure class="o-gallery-bread"><Photo photo={photos.pastry} sizes="(max-width: 700px) 55vw, 25vw" /><figcaption>03 — Small comforts</figcaption></figure><Botanical class="o-gallery-leaf" /></div><p class="o-disclosure">{copy.galleryNotice}</p></div></section>
+
+  <section class="o-visit o-shell" id="visit" tabindex="-1" aria-labelledby="organic-visit-title"><div class="o-visit-copy"><p class="o-kicker">A NEW CHAPTER IN BERLIN</p><h2 id="organic-visit-title">A little closer<br /><span>to Kalma.</span></h2><p>There’s a place for this story.<br />Find Kalma’s announced Berlin address below.</p><p class="o-note">{business.status}</p><a class="o-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Follow the opening story <span aria-hidden="true">↗</span><span class="sr-only"> (opens Instagram in a new tab)</span></a></div><div class="o-address-card"><Botanical /><p class="o-kicker">FIND US / BERLIN</p><address>{business.address.street}<span>{business.address.city}, {business.address.country}</span></address><a class="o-button o-button-light" href={business.directions} target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span><span class="sr-only"> (opens Google Maps in a new tab)</span></a><p class="o-note">Check Kalma’s own channels before visiting.</p></div></section>
+
+  <Newsletter />
+</OrganicLayout>
