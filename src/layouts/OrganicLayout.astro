@@ -1,0 +1,10 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/organic/Header.astro';
+import Footer from '../components/organic/Footer.astro';
+import '../styles/organic.css';
+---
+<BaseLayout title="Kalma Organic — A moment worth tasting" description="Guatemalan coffee, a Berlin connection and room to slow down. Explore Kalma Organic, an independent Café Kalma website design concept." class="organic-page">
+  <link slot="head" rel="stylesheet" href="/assets/fonts/fraunces.css" />
+  <Header /><main id="main" tabindex="-1"><slot /></main><Footer />
+</BaseLayout>

@@ -32,3 +32,12 @@ Stock-photo labels appear next to the hero, menu and gallery. No photograph is a
 ## Original concept elements
 
 The text wordmark, simple `k` favicon, typographic address panel and CSS compositions were created for this independent concept. They are provisional design elements, not official Kalma brand assets. No client-provided original logo was available. Palette values are centralized in `src/styles/tokens.css` for later adjustment.
+
+## Phase 2: Organic
+
+- Wix mood reference: https://www.wix.com/website-template/view/html/wh-1350 — “Cafe (Earthy)”. Its public preview informed the warm, relaxed tone only. No Wix source code, layout, typography assets or imagery is included. The Organic composition is original.
+- Kalma's public landing page was checked again on 30 October 2026; the first Berlin home remains described as in preparation. Shared business facts are unchanged.
+- Organic reuses the six licensed, optimized Unsplash photographs listed above. Its coffee-sharing hero, offset menu and nonuniform gallery apply different crops and arrangements. No additional photographs were added.
+- Fraunces by Undercase Type: https://github.com/google/fonts/tree/main/ofl/fraunces. SIL Open Font License 1.1; `public/assets/fonts/fraunces-OFL.txt` contains the license. The 400-weight optical-size-variable Latin WOFF2 is hosted locally (34,880 bytes), fetched through the official Google Fonts CSS endpoint. It is loaded only by Organic and the concept selector; Heritage's fonts are unchanged.
+- The botanical line drawing is original, decorative SVG made for this concept. It does not depict a specific crop, farm or certification and does not replace the shared Kalma wordmark.
+- “Organic” is the creative direction's name, not a claim that any Kalma product is certified organic.
