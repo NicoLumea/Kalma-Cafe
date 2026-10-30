@@ -1,0 +1,15 @@
+:root {
+  --kalma-green: #214b32;
+  --kalma-dark-green: #153724;
+  --kalma-cream: #f7f4eb;
+  --kalma-ivory: #fffefa;
+  --kalma-gold: #ba9564;
+  --kalma-charcoal: #242824;
+  --muted: #596052;
+  --line: #d5d6c8;
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', Arial, sans-serif;
+  --gutter: clamp(24px, 5vw, 88px);
+  --section-space: clamp(72px, 9vw, 144px);
+  --content-width: 1440px;
+}

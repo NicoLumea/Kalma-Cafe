@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wordmark from '../components/shared/Wordmark.astro';
+import Photo from '../components/shared/Photo.astro';
+import { concepts } from '../data/concepts';
+import { photos } from '../data/images';
+import { business } from '../data/business';
+import '../styles/presentation.css';
+---
+<BaseLayout title="Café Kalma: Digital Concepts" description="Four creative directions. One distinctive identity. An independent website design presentation for Café Kalma, beginning with Kalma Heritage.">
+  <header class="presentation-header"><Wordmark href="/" /><span>AN INDEPENDENT CREATIVE EXPLORATION <i aria-hidden="true">↗</i></span></header>
+  <main id="main" tabindex="-1">
+    <section class="presentation-intro"><p class="eyebrow">Café Kalma: Digital Concepts</p><h1>Four creative directions.<br /><em>One distinctive identity.</em></h1><div class="presentation-intro-bottom"><p>A study in coffee, culture and the art of slowing down.<br />Four ways to bring Kalma’s spirit to the screen.</p><span>BERLIN × GUATEMALA<br />CONCEPT COLLECTION / 01—04</span></div></section>
+    <section class="concept-collection" aria-label="Website concepts">
+      <article class="featured-concept"><div class="concept-preview"><div class="preview-type" aria-hidden="true"><span>kalma✳</span><p>A moment<br />worth<br /><em>tasting.</em></p><small>GUATEMALAN SOUL. BERLIN RHYTHM.</small></div><Photo photo={photos.ritual} eager sizes="(max-width: 700px) 75vw, 45vw" /><span class="preview-label">01 / HERITAGE</span></div><div class="concept-details"><div class="concept-number">01 <span>AVAILABLE TO EXPLORE</span></div><h2>{concepts[0].name}</h2><p>{concepts[0].description}</p><span class="concept-mood">{concepts[0].mood}</span><a class="button button-green" href="/heritage/">Explore Heritage <span aria-hidden="true">↗</span></a></div></article>
+      <div class="future-concepts">{concepts.slice(1).map(concept => <article class="future-concept"><div class="future-heading"><span>{concept.number}</span><span>COMING SOON</span></div><div class="future-mark" aria-hidden="true">{concept.number}</div><h2>{concept.name}</h2><p>{concept.description}</p><span class="concept-mood">{concept.mood}</span></article>)}</div>
+    </section>
+  </main>
+  <footer class="presentation-footer"><p>{business.notice}</p><a href="/concept-notice/">About this presentation <span aria-hidden="true">↗</span></a></footer>
+</BaseLayout>

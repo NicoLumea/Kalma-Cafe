@@ -1,0 +1,6 @@
+---
+import type { Photo } from '../../data/images';
+interface Props { photo: Photo; class?: string; eager?: boolean; sizes?: string; }
+const { photo, class: className, eager = false, sizes = '(max-width: 700px) 100vw, 50vw' } = Astro.props;
+---
+<img class={className} src={`/assets/${photo.path}-1280.webp`} srcset={`/assets/${photo.path}-640.webp 640w, /assets/${photo.path}-1280.webp 1280w`} sizes={sizes} width={photo.width} height={photo.height} alt={photo.alt} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
