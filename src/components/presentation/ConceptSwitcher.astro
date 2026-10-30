@@ -1,0 +1,28 @@
+---
+import type { WebsiteConcept } from '../../data/presentation';
+import stylesheet from './ConceptSwitcher.css?url';
+import script from '../../scripts/concept-switcher.js?url';
+interface Props {
+  concepts: readonly WebsiteConcept[];
+  currentId?: string;
+  allConceptsHref?: string;
+  id?: string;
+}
+const { concepts, currentId, allConceptsHref = '/', id = 'concept-switcher' } = Astro.props;
+const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+const active = currentId ?? concepts.find(concept => normalize(concept.href) === normalize(Astro.url.pathname))?.id;
+---
+<aside class="cs-root" data-concept-switcher aria-label="Design presentation tools">
+  <link rel="stylesheet" href={stylesheet} />
+  <button class="cs-launch" type="button" data-cs-launch hidden aria-expanded="false" aria-haspopup="dialog" aria-controls={`${id}-dialog`}><span class="cs-icon" aria-hidden="true">▦</span> Explore Designs</button>
+  <details class="cs-fallback" data-cs-fallback>
+    <summary class="cs-launch"><span class="cs-icon" aria-hidden="true">▦</span> Explore Designs</summary>
+    <div class="cs-panel" data-cs-panel id={`${id}-panel`}>
+      <div class="cs-heading"><div><p class="cs-eyebrow">DESIGN COLLECTION</p><h2 class="cs-title" id={`${id}-title`}>Website Concepts</h2></div><button type="button" class="cs-close" data-cs-close hidden aria-label="Close design switcher"><span aria-hidden="true">×</span></button></div>
+      <nav class="cs-navigation" aria-label="Website concepts"><ol class="cs-list">{concepts.map(concept => <li>{concept.available ? <a class="cs-item" href={concept.href} aria-current={concept.id === active ? 'page' : undefined}><span class="cs-number">{concept.number}</span><span class="cs-copy"><span class="cs-name">{concept.name}</span><span class="cs-description">{concept.description}</span>{concept.id === active && <span class="cs-current">Currently viewing</span>}</span><span class="cs-arrow" aria-hidden="true">{concept.id === active ? '✓' : '↗'}</span></a> : <span class="cs-item cs-unavailable" aria-disabled="true"><span class="cs-number">{concept.number}</span><span class="cs-copy"><span class="cs-name">{concept.name}</span><span class="cs-description">{concept.description}</span><span class="cs-current">Coming soon</span></span></span>}</li>)}</ol></nav>
+      <a class="cs-all" href={allConceptsHref}><span aria-hidden="true">←</span> All Concepts</a>
+    </div>
+  </details>
+  <dialog class="cs-dialog" id={`${id}-dialog`} aria-labelledby={`${id}-title`} data-cs-dialog></dialog>
+  <script is:inline type="module" src={script}></script>
+</aside>

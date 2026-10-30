@@ -39,13 +39,19 @@ The production output is `dist/`. `npm run preview` serves that build. `npm inst
 - `src/components/organic/`: independent navigation, botanical illustration, menu item, newsletter and footer.
 - `src/components/minimal/`: independent numbered navigation, editorial menu, demo newsletter and footer.
 - `src/components/immersive/`: cinematic hero, navigation, keyboard-controlled story scenes, menu, gallery, demo newsletter and footer.
-- `src/components/presentation/`: retained reusable concept-placeholder component.
+- `src/components/presentation/`: reusable typed concept switcher and retained concept-placeholder component.
 - `src/layouts/`: global metadata with optional head assets, and independent Heritage/Organic/Minimal/Immersive frames.
 - `src/styles/`: design tokens, shared styles and isolated concept styling.
 - `public/assets/`: local photographs, fonts and provisional branding; no runtime image/font services.
 - `scripts/site.test.mjs`: post-build route, link, asset and demonstration-safety checks.
 
 All four concepts are complete and reuse shared business facts, local images and the temporary wordmark while retaining their own layouts and styles.
+
+## Presentation switcher
+
+“Explore Designs” appears on all four concept routes. Its typed data comes from `src/data/concepts.ts`; `BaseLayout.astro` mounts one shared component. Desktop uses a floating modal panel, while mobile uses a bottom sheet. Normal links also work through a native details fallback without JavaScript.
+
+Disable it centrally by setting `presentationConfig.enabled` to `false` in `src/data/presentation.ts`, or build with `PRESENTATION_MODE=off npm run build`. Disabled pages load neither its script nor its stylesheet. This is a presentation setting, not access control. See [reuse instructions and verification](docs/CONCEPT-SWITCHER.md).
 
 ## Content and demo boundaries
 
@@ -61,4 +67,4 @@ See [asset and source records](docs/ASSETS.md), [Heritage verification](docs/VER
 
 ## Repository workflow
 
-Repository: `NicoLumea/Kalma-Cafe`. Phase 4 branch: `feature/kalma-immersive`, based on main after merged Minimal PR #3 (`a051c85ec0f6b342934a2b8cb7ae4192ced8313d`). Review through a pull request targeting `main`; do not merge automatically or deploy directly to production. Publishing the feature branch triggers the existing Cloudflare preview build. This repository remains the source for all four planned concepts.
+Repository: `NicoLumea/Kalma-Cafe`. Phase 5.1 branch: `feature/kalma-concept-switcher`, based on main after merged Immersive PR #4 (`6524539621a84f30fab20bfa479cce150606fff3`). Review through a pull request targeting `main`; do not merge automatically or deploy directly to production. Publishing the feature branch triggers the existing Cloudflare preview build. This repository remains the source for all four concepts.
