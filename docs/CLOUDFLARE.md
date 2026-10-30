@@ -1,5 +1,20 @@
 # Cloudflare deployment preparation
 
+## Connected Worker preview builds
+
+The connected Worker is `kalma-cafe`. Wrangler is pinned to `4.156.0` in the project and lockfile (Worker Previews requires at least `4.135.0`). The authorized preview branch is `feature/kalma-heritage`; the production branch remains `main`.
+
+- Build command: `npm run build`.
+- Preview command: `npx wrangler preview`.
+- Static Astro output: `dist`, configured in the top-level `assets` block.
+- Required Preview configuration: `previews: {}`. This static site needs no separate bindings or environment variables.
+
+Pushing the feature branch triggers the existing Git-connected preview build. `npm run preview` remains the local Astro build viewer; Cloudflare uses the separate command above. Do not run `wrangler deploy`, merge the PR, or change the production branch to test a Preview.
+
+References: [Worker Previews setup](https://developers.cloudflare.com/workers/previews/get-started/) and [Preview configuration](https://developers.cloudflare.com/workers/previews/configuration/).
+
+## Original deployment preparation notes
+
 **No deployment, Cloudflare project, DNS change or credential configuration was performed.** The project is pure static Astro and does not require a Cloudflare server adapter, Worker runtime code or database.
 
 ## Recommended: Pages with Git integration

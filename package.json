@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24 <25" },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",
@@ -11,6 +13,12 @@
     "check": "astro check",
     "test": "node --test scripts/site.test.mjs"
   },
-  "dependencies": { "astro": "7.4.4" },
-  "devDependencies": { "@astrojs/check": "^0.9.4", "typescript": "^5.9.3" }
+  "dependencies": {
+    "astro": "7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.3",
+    "wrangler": "4.156.0"
+  }
 }
