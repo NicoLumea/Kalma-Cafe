@@ -1,0 +1,10 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/minimal/Header.astro';
+import Footer from '../components/minimal/Footer.astro';
+import '../styles/minimal.css';
+---
+<BaseLayout title="Kalma Minimal — A moment worth tasting" description="Coffee. Time. Connection. A contemporary, independent website concept for Café Kalma, connecting Guatemalan coffee with a new Berlin chapter." class="minimal-page">
+  <link slot="head" rel="stylesheet" href="/assets/fonts/instrument-serif.css" />
+  <Header /><main id="main" tabindex="-1"><slot /></main><Footer />
+</BaseLayout>

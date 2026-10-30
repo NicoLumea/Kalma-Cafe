@@ -1,0 +1,7 @@
+---
+import Photo from '../shared/Photo.astro';
+import type { MinimalMenuItem } from '../../data/minimal';
+interface Props { items: MinimalMenuItem[]; }
+const { items } = Astro.props;
+---
+<div class="m-menu-list">{items.map((item, index) => <article class="m-menu-row" data-menu-item={item.id}><div class="m-menu-category"><span aria-hidden="true">0{index + 1}</span><span>{item.category}</span></div><div class="m-menu-name"><h3>{item.name}</h3>{item.price && <p>{new Intl.NumberFormat('en-DE', { style: 'currency', currency: item.price.currency }).format(item.price.amount)}</p>}</div><p class="m-menu-description">{item.description}</p>{item.image && <Photo class="m-menu-optional-image" photo={item.image} sizes="(max-width: 700px) 80vw, 30vw" />}</article>)}</div>

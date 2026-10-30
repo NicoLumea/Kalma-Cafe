@@ -1,0 +1,53 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { minimalNavigation } from '../../data/minimal';
+---
+<div class="m-concept-bar"><span>INDEPENDENT WEBSITE CONCEPT</span><a href="/">All concepts <span aria-hidden="true">↗</span></a></div>
+<header class="m-header"><div class="m-header-inner m-shell">
+  <Wordmark href="/minimal/" light />
+  <button class="m-menu-toggle" type="button" aria-expanded="false" aria-controls="minimal-navigation">Menu <span aria-hidden="true">＋</span></button>
+  <nav id="minimal-navigation" aria-label="Main navigation">{minimalNavigation.map((item, index) => <a href={item.href} class:list={{ 'm-nav-visit': item.href === '#visit' }} aria-current={index === 0 ? 'location' : undefined}><span class="m-nav-number" aria-hidden="true">0{index + 1}</span><span>{item.label}</span>{item.href === '#visit' && <span class="m-nav-arrow" aria-hidden="true">↗</span>}</a>)}</nav>
+</div></header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.m-menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#minimal-navigation');
+  const header = document.querySelector<HTMLElement>('.m-header');
+  const mobile = window.matchMedia('(max-width: 900px)');
+  if (toggle && nav && header) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+    const targets = links.map(link => document.getElementById(new URL(link.href).hash.slice(1)));
+    const setOpen = (open: boolean, returnFocus = false) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.toggleAttribute('data-open', open);
+      nav.inert = mobile.matches && !open;
+      if (returnFocus) toggle.focus();
+    };
+    const setCurrent = (index: number) => links.forEach((link, i) => {
+      if (i === index) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    const updateCurrent = () => {
+      const edge = header.getBoundingClientRect().height + 90;
+      let current = 0;
+      targets.forEach((target, i) => { if (target && target.getBoundingClientRect().top <= edge) current = i; });
+      setCurrent(current);
+    };
+    document.documentElement.classList.add('minimal-nav-ready');
+    setOpen(false);
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    links.forEach((link, i) => link.addEventListener('click', () => {
+      setOpen(false); setCurrent(i); targets[i]?.focus({ preventScroll: true });
+    }));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') setOpen(false, true); });
+    for (const name of ['click', 'focusin']) document.addEventListener(name, event => {
+      if (event.target instanceof Node && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+    });
+    mobile.addEventListener('change', () => { setOpen(false); updateCurrent(); });
+    let queued = false;
+    window.addEventListener('scroll', () => {
+      if (!queued) { queued = true; requestAnimationFrame(() => { updateCurrent(); queued = false; }); }
+    }, { passive: true });
+    window.addEventListener('resize', updateCurrent);
+    updateCurrent();
+  }
+</script>
