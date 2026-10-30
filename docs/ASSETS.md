@@ -41,3 +41,18 @@ The text wordmark, simple `k` favicon, typographic address panel and CSS composi
 - Fraunces by Undercase Type: https://github.com/google/fonts/tree/main/ofl/fraunces. SIL Open Font License 1.1; `public/assets/fonts/fraunces-OFL.txt` contains the license. The 400-weight optical-size-variable Latin WOFF2 is hosted locally (34,880 bytes), fetched through the official Google Fonts CSS endpoint. It is loaded only by Organic and the concept selector; Heritage's fonts are unchanged.
 - The botanical line drawing is original, decorative SVG made for this concept. It does not depict a specific crop, farm or certification and does not replace the shared Kalma wordmark.
 - “Organic” is the creative direction's name, not a claim that any Kalma product is certified organic.
+
+## Phase 3: Minimal
+
+- Wix mood reference: https://www.wix.com/website-template/view/html/681 — “Cafe Website Template”. Its public description and preview informed general café/editorial direction only. No Wix code or imagery is included in the implementation.
+- Shared business facts and the provisional wordmark are unchanged. Minimal reuses the existing café-atmosphere and bread photographs.
+- Two additional standard Unsplash photographs, downloaded 30 October 2026 under the same Unsplash License described above, add a closer view of coffee preparation and roasting. They are illustrative stock, not Kalma premises, suppliers or confirmed products:
+
+| Local basename | Source | Use |
+| --- | --- | --- |
+| `coffee/brewing` | https://images.unsplash.com/photo-1442512595331-e89e73853f31 | Pour-over hero, gallery and selector preview |
+| `coffee/roasting` | https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb | Roasting process mood, not a sourcing claim |
+
+Both have local 640×427 and 1280×854 WebP variants, responsive delivery and descriptive alt text. The four files total 264,024 bytes.
+
+- Instrument Serif, regular 400 Latin: https://github.com/google/fonts/tree/main/ofl/instrumentserif. SIL Open Font License 1.1, recorded in `public/assets/fonts/instrument-serif-OFL.txt`. The WOFF2 was obtained through the official Google Fonts CSS endpoint and is served locally. It loads only on Minimal and the selector. No italic font was added. Body text reuses local DM Sans. Heritage and Organic font loading is unchanged.

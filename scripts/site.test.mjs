@@ -78,13 +78,14 @@ test('no operational forms, active email collection, third-party scripts or remo
   }
 });
 
-test('only completed Heritage and Organic concepts are linked from the gallery', () => {
+test('only completed Heritage, Organic and Minimal concepts are linked from the gallery', () => {
   const home = readFileSync(join(root, 'index.html'), 'utf8');
-  for (const route of ['minimal', 'immersive']) assert.doesNotMatch(home, new RegExp(`href="/${route}`));
+  for (const route of ['immersive']) assert.doesNotMatch(home, new RegExp(`href="/${route}`));
   assert.match(home, /href="\/heritage\/"/);
   assert.match(home, /href="\/organic\/"/);
-  assert.equal((home.match(/COMING SOON/g) ?? []).length, 2);
-  assert.equal((home.match(/AVAILABLE TO EXPLORE/g) ?? []).length, 2);
+  assert.match(home, /href="\/minimal\/"/);
+  assert.equal((home.match(/COMING SOON/g) ?? []).length, 1);
+  assert.equal((home.match(/AVAILABLE TO EXPLORE/g) ?? []).length, 3);
 });
 
 test('Organic provides complete accessible sections, working directions and safe demonstration content', () => {
@@ -124,4 +125,49 @@ test('Organic styling and font are isolated from Heritage', () => {
   assert.doesNotMatch(heritageCss, /\.o-hero/);
   const organicCss = cssLinks(organic).map(file => readFileSync(join(root, file), 'utf8')).join('');
   assert.match(organicCss, /prefers-reduced-motion/);
+});
+
+test('Minimal has complete sections, accessible navigation and demonstration-only controls', () => {
+  const html = readFileSync(join(root, 'minimal/index.html'), 'utf8');
+  for (const id of ['home', 'story', 'origin', 'menu', 'gallery', 'visit']) {
+    const section = tags(html, 'section').find(tag => attr(tag, 'id') === id);
+    assert.ok(section, `Missing Minimal section: ${id}`);
+    assert.equal(attr(section, 'tabindex'), '-1');
+    assert.ok(attr(section, 'aria-labelledby'));
+  }
+  const toggle = tags(html, 'button').find(tag => attr(tag, 'aria-controls') === 'minimal-navigation');
+  assert.equal(attr(toggle, 'aria-expanded'), 'false');
+  assert.equal(tags(html, 'a').filter(tag => attr(tag, 'aria-current') === 'location').length, 1);
+  const ids = tags(html, 'article').map(tag => attr(tag, 'data-menu-item')).filter(Boolean);
+  assert.equal(ids.length, 3);
+  assert.equal(new Set(ids).size, 3);
+  assert.match(html, /Demonstration menu only/);
+  assert.match(html, /No orders or payments are accepted/);
+  assert.match(html, /Newsletter demonstration only/);
+  assert.match(html, /Independent website design concept/);
+  assert.match(html, /not images of Café Kalma’s actual premises/);
+  const buttons = tags(html, 'button');
+  assert.equal(buttons.length, 2, 'Only menu disclosure and disabled newsletter controls are expected');
+  assert.ok(buttons.filter(tag => !attr(tag, 'aria-controls')).every(tag => /\bdisabled(?:\s|>|=)/.test(tag)));
+  assert.doesNotMatch(html, /href="[^"\s]*(?:checkout|cart|order\/|payment)/i);
+  const directions = tags(html, 'a').find(tag => (attr(tag, 'href') ?? '').startsWith('https://www.google.com/maps/dir/'));
+  assert.equal(new URL(attr(directions, 'href').replaceAll('&amp;', '&')).searchParams.get('destination'), 'Seelingstraße 34, 14059 Berlin, Germany');
+  const images = tags(html, 'img');
+  assert.equal(images.filter(tag => attr(tag, 'loading') === 'eager').length, 1);
+  assert.ok(images.every(tag => ['lazy', 'eager'].includes(attr(tag, 'loading'))));
+});
+
+test('Minimal typography and CSS are isolated from Heritage and Organic', () => {
+  for (const route of ['heritage', 'organic']) {
+    const html = readFileSync(join(root, route, 'index.html'), 'utf8');
+    assert.doesNotMatch(html, /instrument-serif|minimal-page|minimal-navigation/);
+    const css = tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => readFileSync(join(root, attr(tag, 'href')), 'utf8')).join('');
+    assert.doesNotMatch(css, /\.m-hero|\.m-header/);
+  }
+  const html = readFileSync(join(root, 'minimal/index.html'), 'utf8');
+  assert.match(html, /instrument-serif\.css/);
+  assert.match(html, /class="minimal-page"/);
+  const css = tags(html, 'link').filter(tag => attr(tag, 'rel') === 'stylesheet').map(tag => readFileSync(join(root, attr(tag, 'href')), 'utf8')).join('');
+  assert.match(css, /prefers-reduced-motion/);
+  assert.doesNotMatch(css, /\.o-hero|\.hero-visual/);
 });

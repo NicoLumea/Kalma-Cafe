@@ -1,4 +1,28 @@
 ---
-import ComingSoon from '../../components/presentation/ComingSoon.astro';
+import MinimalLayout from '../../layouts/MinimalLayout.astro';
+import Photo from '../../components/shared/Photo.astro';
+import Menu from '../../components/minimal/Menu.astro';
+import Newsletter from '../../components/minimal/Newsletter.astro';
+import { minimal as copy, minimalPhotos, minimalMenu } from '../../data/minimal';
+import { photos } from '../../data/images';
+import { business } from '../../data/business';
 ---
-<ComingSoon name="Kalma Minimal" number="03" />
+<MinimalLayout>
+  <section class="m-hero m-shell" id="home" tabindex="-1" aria-labelledby="minimal-hero-title">
+    <div class="m-hero-meta"><p class="m-label">GUATEMALAN COFFEE / BERLIN</p><span>LESS RUSH. MORE PRESENCE.</span></div>
+    <div class="m-hero-heading"><h1 id="minimal-hero-title">A moment<br /><span>worth tasting.</span></h1><div class="m-hero-intro"><p>{copy.introduction}</p><div class="m-hero-actions"><a class="m-button" href="#story">Discover Kalma <span aria-hidden="true">↗</span></a><a class="m-link" href="#visit">Visit Us <span aria-hidden="true">↗</span></a></div></div></div>
+    <figure class="m-hero-figure"><Photo photo={minimalPhotos.brewing} eager sizes="(max-width: 700px) 100vw, 92vw" /><figcaption><span>THE EVERYDAY, CONSIDERED.</span><span>ILLUSTRATIVE STOCK PHOTOGRAPHY</span></figcaption></figure>
+  </section>
+
+  <section class="m-philosophy m-shell" id="story" tabindex="-1" aria-labelledby="minimal-story-title"><p class="m-label">01 / THE KALMA PHILOSOPHY</p><h2 id="minimal-story-title">Coffee. Time. Connection.</h2><p class="m-philosophy-copy">{copy.philosophy}</p><div class="m-philosophy-bottom"><span>Room for the essential.</span><a class="m-link" href="#origin">The connection to origin <span aria-hidden="true">↓</span></a></div></section>
+
+  <section class="m-origin" id="origin" tabindex="-1" aria-labelledby="minimal-origin-title"><div class="m-origin-grid m-shell"><figure class="m-origin-figure"><Photo photo={minimalPhotos.roasting} sizes="(max-width: 700px) 100vw, 60vw" /><figcaption>{copy.originNotice}</figcaption></figure><div class="m-origin-copy"><p class="m-label">02 / A CONNECTION TO ORIGIN</p><h2 id="minimal-origin-title">Guatemalan coffee.<br /><span>A Berlin chapter.</span></h2><p>{copy.origin}</p><div class="m-origin-route"><span>GUATEMALA</span><span aria-hidden="true">↗</span><span>BERLIN</span></div></div></div></section>
+
+  <section class="m-menu m-shell" id="menu" tabindex="-1" aria-labelledby="minimal-menu-title"><div class="m-section-heading"><div><p class="m-label">03 / COFFEE & KITCHEN</p><h2 id="minimal-menu-title">A few simple pleasures.</h2></div><span class="m-demo-label">ILLUSTRATIVE MENU</span></div><Menu items={minimalMenu} /><p class="m-note m-menu-notice">{copy.menuNotice}</p></section>
+
+  <section class="m-gallery m-shell" id="gallery" tabindex="-1" aria-labelledby="minimal-gallery-title"><div class="m-section-heading"><div><p class="m-label">04 / THE KALMA ATMOSPHERE</p><h2 id="minimal-gallery-title">Space to be.</h2></div><p>Light, texture and a little stillness.<br />An imagined atmosphere for everyday rituals.</p></div><div class="m-gallery-grid"><figure class="m-gallery-landscape"><Photo photo={photos.atmosphere} sizes="(max-width: 700px) 100vw, 90vw" /><figcaption><span>01 / ROOM & LIGHT</span><span>STOCK ATMOSPHERE STUDY</span></figcaption></figure><figure class="m-gallery-detail"><Photo photo={minimalPhotos.brewing} sizes="(max-width: 700px) 90vw, 45vw" /><figcaption>02 / THE QUIET WORK OF A CUP</figcaption></figure><figure class="m-gallery-detail"><Photo photo={photos.pastry} sizes="(max-width: 700px) 90vw, 45vw" /><figcaption>03 / TEXTURE & SIMPLE PLEASURES</figcaption></figure></div><p class="m-note m-gallery-notice">{copy.galleryNotice}</p></section>
+
+  <section class="m-visit" id="visit" tabindex="-1" aria-labelledby="minimal-visit-title"><div class="m-shell"><div class="m-visit-grid"><div><p class="m-label">05 / VISIT KALMA</p><h2 id="minimal-visit-title">A place<br />in Berlin.</h2></div><div class="m-visit-address"><address>{business.address.street}<span>{business.address.city}, {business.address.country}</span></address><a class="m-link" href={business.directions} target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span><span class="sr-only"> (opens Google Maps in a new tab)</span></a></div></div><div class="m-visit-status"><p>{business.status}</p><a href={business.instagram} target="_blank" rel="noopener noreferrer">Opening updates on Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div></div></section>
+
+  <Newsletter />
+</MinimalLayout>

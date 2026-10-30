@@ -1,0 +1,9 @@
+---
+import Wordmark from '../shared/Wordmark.astro';
+import { business } from '../../data/business';
+import { minimalNavigation } from '../../data/minimal';
+---
+<footer class="m-footer"><div class="m-shell">
+  <div class="m-footer-top"><Wordmark href="/minimal/" light /><nav aria-label="Footer navigation">{minimalNavigation.map(item => <a href={item.href}>{item.label}</a>)}</nav><div><address>{business.address.street}<br />{business.address.city}, {business.address.country}</address><a class="m-link" href={business.instagram} target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div></div>
+  <div class="m-footer-bottom"><p>{business.notice}</p><div><a href="/concept-notice/#legal">Legal notice (placeholder)</a><a href="/concept-notice/#privacy">Privacy & demo details</a><a href="/">Concept 03 / Minimal</a></div></div>
+</div></footer>
