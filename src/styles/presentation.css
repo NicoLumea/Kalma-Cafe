@@ -73,3 +73,19 @@
 .future-concept:only-child .concept-mood { grid-column: 2; margin-top: 0; }
 @media (min-width: 651px) and (max-width: 900px) { .minimal-concept-preview { padding: 25px; min-height: 430px; } .minimal-preview-header { margin: -25px -25px 25px; padding: 15px; } .minimal-preview-header > span:last-child { font-size: 5px; } .minimal-preview-title { font-size: 48px; } .minimal-concept-preview img { height: 190px; } .future-concept:only-child { grid-template-columns: 75px 1fr 1fr; gap: 0 20px; } }
 @media (max-width: 650px) { .minimal-concept-preview { min-height: 390px; padding: 25px; } .minimal-preview-header { margin: -25px -25px 25px; padding: 15px; gap: 12px; } .minimal-preview-header > span:last-child { font-size: 5px; } .minimal-preview-title { font-size: clamp(43px, 12vw, 62px); } .minimal-concept-preview img { height: 170px; } .future-concept:only-child { display: block; } .future-concept:only-child h2 { margin-top: 27px; } .future-concept:only-child p { padding-top: 0; max-width: 270px; } .future-concept:only-child .concept-mood { margin-top: 25px; } }
+
+/* Final concept: a cinematic composition, distinct from the three prior previews. */
+.immersive-feature { background: var(--kalma-dark-green); color: var(--kalma-cream); border-color: var(--kalma-dark-green); }
+.immersive-feature .concept-details { background: var(--kalma-dark-green); color: var(--kalma-cream); }
+.immersive-feature .concept-details > p { color: #d0d8c8; }
+.immersive-feature .concept-number > span { color: #d0d8c8; }
+.immersive-feature .concept-number > span::before { background: var(--kalma-gold); }
+.immersive-concept-preview { position: relative; min-height: 540px; isolation: isolate; overflow: hidden; }
+.immersive-concept-preview > img { position: absolute; width: 100%; height: 100%; object-fit: cover; inset: 0; z-index: -2; }
+.immersive-concept-preview::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,#10271ac9,#10271a50),linear-gradient(0deg,#10271acc,transparent); z-index: -1; }
+.immersive-preview-copy { padding: 35px 40px; }
+.immersive-preview-copy > span { font: 400 40px/1 var(--font-heading); letter-spacing: -.07em; }
+.immersive-preview-copy > small { display: block; font-size: 6px; letter-spacing: .13em; margin-top: 145px; }
+.immersive-preview-copy > p { font: 400 clamp(55px,5.7vw,88px)/.9 var(--font-heading); letter-spacing: -.04em; margin-top: 20px; }
+.immersive-feature .preview-label { color: var(--kalma-cream); }
+@media(max-width:700px) { .immersive-concept-preview { min-height: 430px; } .immersive-preview-copy { padding: 28px 24px; } .immersive-preview-copy > small { margin-top: 110px; } .immersive-preview-copy > p { font-size: clamp(46px,10vw,68px); } }
